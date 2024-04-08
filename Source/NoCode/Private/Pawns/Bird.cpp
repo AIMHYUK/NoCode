@@ -70,23 +70,12 @@ void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 void ABird::Move(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, 5000*MovementVector.Y);
-		AddMovementInput(RightDirection, 5000*MovementVector.X);
+    const float DirectionValue = Value.Get<float>();
+    UE_LOG(LogTemp, Error, TEXT("%f"), DirectionValue);
+    if(Controller && (DirectionValue != 0.f))
+    {
+        FVector Forward = GetActorForwardVector(); //방향얻기
+        AddMovementInput(Forward, DirectionValue); //그 방향으로 1.0만큼 가기
 	}
 }
 
