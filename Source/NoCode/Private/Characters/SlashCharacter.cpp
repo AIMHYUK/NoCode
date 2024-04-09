@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GroomComponent.h"
 
 
 ASlashCharacter::ASlashCharacter()
@@ -33,6 +34,15 @@ ASlashCharacter::ASlashCharacter()
 	SpringArm->TargetArmLength = 300;
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(SpringArm);
+
+	Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
+	Hair->SetupAttachment(GetMesh()); //Mesh는 비공개라서 Get함수 사용
+	Hair->AttachmentName = FString("head"); //머리카락을 머리에 붙일 예정
+
+	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
+	Eyebrows->SetupAttachment(GetMesh()); //Mesh는 비공개라서 Get함수 사용
+	Eyebrows->AttachmentName = FString("head"); //머리카락을 머리에 붙일 예정
+
 }
 
 // Called when the game starts or when spawned
@@ -67,6 +77,7 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	{
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Look);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 	}
 
 }

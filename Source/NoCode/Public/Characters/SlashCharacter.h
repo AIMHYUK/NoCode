@@ -14,6 +14,7 @@ class UInputMappingContext;
 class UInputAction;
 class USpringArmComponent;	
 class UCameraComponent;
+class UGroomComponent;
 
 UCLASS()
 class NOCODE_API ASlashCharacter : public ACharacter
@@ -39,10 +40,17 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* LookAction;
+	
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* JumpAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
-
+	//void Jump();
+	// UPROPERTY(BlueprintReadOnly)
+	// bool bCanJump = true;
+	// UFunction(BlueprintCallable)
+	// void SetCanJump(bool bCan) { bCanJump = bCan; }
 private:
 	
 	UPROPERTY(VisibleAnywhere)
@@ -50,5 +58,13 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
+
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Hair;
+	
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+	UGroomComponent* Eyebrows;
+
+
 };
 
