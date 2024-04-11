@@ -11,7 +11,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GroomComponent.h"
-#include "SlashCharacter.h"
+#include "Item.h"
+#include "Weapon.h"
 
 
 ASlashCharacter::ASlashCharacter()
@@ -114,5 +115,11 @@ void ASlashCharacter::Look(const FInputActionValue& Value)
 }
 void ASlashCharacter::EKeyPressed(const FInputActionValue &Value)
 {
-	
+	const bool Pressed = Value.Get<bool>();
+	UE_LOG(LogTemp, Warning, TEXT("equip"));
+	AWeapon* OverLappingWeapon = Cast<AWeapon>(OverlappingItem);
+	if(OverLappingWeapon)
+	{
+		OverLappingWeapon->Equip(GetMesh(),FName("RightHandSocket")); //무기의 메쉬를 오른손 소켓에 저장
+	}
 }

@@ -17,6 +17,12 @@ class UCameraComponent;
 class UGroomComponent;
 class AItem;
 
+enum CharacterState
+{
+	Unequipped,
+	EquippedOneHandedWeapon
+}
+
 UCLASS()
 class NOCODE_API ASlashCharacter : public ACharacter
 {
@@ -73,7 +79,7 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 public:
-	FORCEINLINE void SetOverLappingItem(AItem* Item;){ OverlappingItem = Item; } //inline으로 게터세터 선언
+	FORCEINLINE void SetOverLappingItem(AItem* Item){ OverlappingItem = Item; } //inline으로 게터세터 선언
 
 };
 
