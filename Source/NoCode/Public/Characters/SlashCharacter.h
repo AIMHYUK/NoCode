@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "CharacterTypes.h"
 #include "SlashCharacter.generated.h"
 
 
@@ -17,11 +18,7 @@ class UCameraComponent;
 class UGroomComponent;
 class AItem;
 
-enum CharacterState
-{
-	Unequipped,
-	EquippedOneHandedWeapon
-}
+
 
 UCLASS()
 class NOCODE_API ASlashCharacter : public ACharacter
@@ -64,6 +61,8 @@ protected:
 	// void SetCanJump(bool bCan) { bCanJump = bCan; }
 private:
 	
+	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArm;
 	
@@ -80,6 +79,6 @@ private:
 	AItem* OverlappingItem;
 public:
 	FORCEINLINE void SetOverLappingItem(AItem* Item){ OverlappingItem = Item; } //inline으로 게터세터 선언
-
+	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState;}
 };
 

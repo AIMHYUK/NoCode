@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
+
 void USlashAnimInstance::NativeInitializeAnimation()
 {
     Super::NativeInitializeAnimation();
@@ -25,5 +26,6 @@ void USlashAnimInstance::NativeUpdateAnimation(float DeltaTime)
     {      
         GroundSpeed = UKismetMathLibrary::VSizeXY(SlashCharacterMovement->Velocity);
         bIsFalling = SlashCharacterMovement->IsFalling();
+        CharacterState = SlashCharacter->GetCharacterState(); //게터함수 쓰자
     }
 }

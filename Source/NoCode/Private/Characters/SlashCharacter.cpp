@@ -121,5 +121,6 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue &Value)
 	if(OverLappingWeapon)
 	{
 		OverLappingWeapon->Equip(GetMesh(),FName("RightHandSocket")); //무기의 메쉬를 오른손 소켓에 저장
+		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 	}
 }
