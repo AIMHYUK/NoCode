@@ -15,6 +15,7 @@ class UInputAction;
 class USpringArmComponent;	
 class UCameraComponent;
 class UGroomComponent;
+class AItem;
 
 UCLASS()
 class NOCODE_API ASlashCharacter : public ACharacter
@@ -43,9 +44,13 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* JumpAction;
+	
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* EquipAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void EKeyPressed(const FInputActionValue& Value);
 	//void Jump();
 	// UPROPERTY(BlueprintReadOnly)
 	// bool bCanJump = true;
@@ -65,6 +70,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 	UGroomComponent* Eyebrows;
 
+	UPROPERTY(VisibleInstanceOnly)
+	AItem* OverlappingItem;
+public:
+	FORCEINLINE void SetOverLappingItem(AItem* Item;){ OverlappingItem = Item; } //inline으로 게터세터 선언
 
 };
 
