@@ -27,6 +27,15 @@ void AItem::BeginPlay()
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereEndlap); //바인딩 위해 AddDynamic
 }
 
+float AItem::TransformedSin()
+{
+	return Amplitude * FMath::Sin(RunningTime * TimeConstant);
+}
+float AItem::TransformedCos()
+{
+	return Amplitude * FMath::Cos(RunningTime * TimeConstant);
+}
+
 void AItem::OnSphereOverlap(UPrimitiveComponent *OverlappedComponent, AActor *OtherActor, UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
 	ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor);
@@ -51,5 +60,13 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	RunningTime += DeltaTime;
+
+	if(ItemState == EItemState::EIS_Hovering)
+	{
+		AddActorWorldOffset(FVector(0, 0, TransformedSin()));
+		
+	}
+	
 }
 

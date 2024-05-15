@@ -14,6 +14,7 @@ class NOCODE_API AWeapon : public AItem
 {
 	GENERATED_BODY()
 public:
+
 	void Equip(USceneComponent* Inparent, FName InSocketName);
 protected:
 

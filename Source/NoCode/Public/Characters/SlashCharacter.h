@@ -54,15 +54,24 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* AttackAction;
 
+	//**
+	//인풋에 대한 콜백
+	//**
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void EKeyPressed(const FInputActionValue& Value);
-	void Attack(const FInputActionValue& Value);
+	void Attack();
 	//void Jump();
 	// UPROPERTY(BlueprintReadOnly)
 	// bool bCanJump = true;
 	// UFunction(BlueprintCallable)
 	// void SetCanJump(bool bCan) { bCanJump = bCan; }
+
+	//재생 몽타주 함수
+	void PlayAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	bool CanAttack();
 private:
 	
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
@@ -87,7 +96,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* AttackMontage;
 public:
+
 	FORCEINLINE void SetOverLappingItem(AItem* Item){ OverlappingItem = Item; } //inline으로 게터세터 선언
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState;}
+	
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EActionState ActionState = EActionState::EAS_Unoccupied;
 };
 

@@ -90,6 +90,7 @@ void ASlashCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
+	if(ActionState == EActionState::EAS_Attacking) return;
 	const FRotator Rotation = GetController()->GetControlRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0); //가로 회전방향(YAW)만 사용
 
@@ -126,13 +127,23 @@ void ASlashCharacter::EKeyPressed(const FInputActionValue &Value)
 	}
 }
 
-void ASlashCharacter::Attack(const FInputActionValue& Value)
+void ASlashCharacter::Attack()
+{		
+	if(CanAttack())
+	{
+		PlayAttackMontage();
+		ActionState = EActionState::EAS_Attacking;
+	}
+	
+}
+
+void ASlashCharacter::PlayAttackMontage()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
-		int32 Selection = FMath::RandRange(0, 1);
+		const int32 Selection = FMath::RandRange(0, 1);
 		FName SectionName = FName();
 		switch (Selection)
 		{
@@ -147,4 +158,9 @@ void ASlashCharacter::Attack(const FInputActionValue& Value)
 		}
 		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 	}
+}
+bool ASlashCharacter::CanAttack()
+{
+	return (ActionState == EActionState::EAS_Unoccupied && 
+		CharacterState != ECharacterState::ECS_Unequipped);
 }
