@@ -17,7 +17,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItem;
-
+class UAnimMontage;
 
 
 UCLASS()
@@ -51,9 +51,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* EquipAction;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* AttackAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void EKeyPressed(const FInputActionValue& Value);
+	void Attack(const FInputActionValue& Value);
 	//void Jump();
 	// UPROPERTY(BlueprintReadOnly)
 	// bool bCanJump = true;
@@ -77,6 +81,11 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
+
+
+	//몽타주
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* AttackMontage;
 public:
 	FORCEINLINE void SetOverLappingItem(AItem* Item){ OverlappingItem = Item; } //inline으로 게터세터 선언
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState;}
