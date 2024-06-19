@@ -15,6 +15,7 @@
 #include "Weapon.h"
 #include "Animation/AnimMontage.h"
 
+
 ASlashCharacter::ASlashCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -118,12 +119,30 @@ void ASlashCharacter::Look(const FInputActionValue& Value)
 void ASlashCharacter::EKeyPressed(const FInputActionValue &Value)
 {
 	const bool Pressed = Value.Get<bool>();
-	UE_LOG(LogTemp, Warning, TEXT("equip"));
+	// Enum 값을 문자열로 변환
+    FString EnumAsString = UEnum::GetValueAsString(CharacterState);
+    // 문자열로 변환된 Enum 값을 출력
+    UE_LOG(LogTemp, Warning, TEXT("%s"), *EnumAsString);
 	AWeapon* OverLappingWeapon = Cast<AWeapon>(OverlappingItem);
 	if(OverLappingWeapon)
 	{
 		OverLappingWeapon->Equip(GetMesh(),FName("RightHandSocket")); //무기의 메쉬를 오른손 소켓에 저장
-		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon; //상태를 한손무기 장착상태로 변경
+		OverlappingItem = nullptr;
+		EquippedWeapon = OverLappingWeapon;
+	}
+	else
+	{
+		if(CanDisarm())
+		{
+			PlayEquipMontage(FName("UnEquip"));
+			CharacterState = ECharacterState::ECS_Unequipped;
+		}
+		else if(CanArm())
+		{
+			PlayEquipMontage(FName("Equip"));
+			CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+		}
 	}
 }
 
@@ -159,8 +178,32 @@ void ASlashCharacter::PlayAttackMontage()
 		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 	}
 }
+
+void ASlashCharacter::PlayEquipMontage(FName SectionName)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && EquipMontage)
+	{
+		AnimInstance->Montage_Play(EquipMontage);
+		AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
+	}
+}
+
 bool ASlashCharacter::CanAttack()
 {
 	return (ActionState == EActionState::EAS_Unoccupied && 
 		CharacterState != ECharacterState::ECS_Unequipped);
+}
+
+bool ASlashCharacter::CanDisarm() //캐릭터가 1.멈춰있고 2.장비하고 있는 상태이면 무기 집어넣음
+{
+    return ActionState == EActionState::EAS_Unoccupied && 
+		CharacterState != ECharacterState::ECS_Unequipped;
+}
+
+bool ASlashCharacter::CanArm() //캐릭터가 1. 멈춰있고 2.원핸드무기 장비중이지 않고 3.장비한 무기가 있다면 무기를 꺼낼 수 있음
+{
+    return ActionState == EActionState::EAS_Unoccupied && 
+		CharacterState != ECharacterState::ECS_EquippedOneHandedWeapon &&
+		EquippedWeapon;
 }
